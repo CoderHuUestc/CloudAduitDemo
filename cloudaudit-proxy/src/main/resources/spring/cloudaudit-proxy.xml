@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <dubbo:application name="cloudaudit-proxy"/>
+
+    <dubbo:registry protocol="zookeeper" address="192.168.88.111:2181"/>
+    <dubbo:registry protocol="zookeeper" address="192.168.88.101:2181"/>
+    <dubbo:registry protocol="zookeeper" address="192.168.88.103:2181"/>
+
+    <dubbo:protocol id="hessianUploadFile" name="hessian" port="8080" server="jetty"/>
+    <dubbo:protocol id="dubboUserManager" name="dubbo" port="20881"/>
+
+    <!--用户管理模块-->
+    <bean id="userManager" class="tech.sylardaemon.cloudaudit.proxy.Server.UserManagerImpl"/>
+    <dubbo:service interface="tech.sylardaemon.cloudaudit.api.UserManager" ref="userManager" version="1.0.0" protocol="dubboUserManager" />
+    <!--文件上传模块-->
+    <bean id="fileUpload" class="tech.sylardaemon.cloudaudit.proxy.Server.FileUploadImpl"/>
+    <dubbo:service interface="tech.sylardaemon.cloudaudit.api.FileUpload" ref="fileUpload" version="1.0.0" protocol="hessianUploadFile" />
+
+</beans>

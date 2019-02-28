@@ -1,0 +1,7 @@
+package tech.sylardaemon.cloudaudit.proxy;
+
+public class Index {
+    public static void main(String[] args) {
+
+    }
+}
